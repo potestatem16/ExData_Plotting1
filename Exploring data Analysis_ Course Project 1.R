@@ -1,0 +1,69 @@
+###########################################################
+#__________Exploratory Data Analysis: Course Project 1.
+#__________Alejandro Rubiano.__________
+###########################################################
+
+setwd("./Cursos/Coursera R pratices")
+
+url_1<-"https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip"
+temp.file<-tempfile()
+download.file(url_1, temp.file)
+unzip(temp.file)
+unlink(temp.file)
+
+file<-"household_power_consumption.txt"
+
+data_household<-read.table(file, header=T, sep=";", stringsAsFactors=F, dec=".")
+
+data_date<-data_household[data_household$Date %in% c("1/2/2007","2/2/2007") ,]
+
+Sys.setlocale("LC_TIME", "C")
+date_and_time <- strptime(paste(data_date$Date, data_date$Time, sep=" "), "%d/%m/%Y %H:%M:%S") 
+
+#########
+# 1). First Graphic
+png("plot1.png")
+hist(as.numeric(data_date[, 3]), main="Global Active Power"
+	, xlab="Global Active Power (kilowatts)", ylab="Frequency", col="Red")
+dev.off()
+
+#########
+# 2). Second graphic
+
+png("plot2.png")
+plot(date_and_time, as.numeric(data_date[, 3]), type="l", xlab="", ylab="Global Active Power (kilowatts)")
+dev.off()
+
+
+#########
+# 3). Third Graphic
+
+png("plot3.png")
+plot(date_and_time, as.numeric(data_date$Sub_metering_1)
+	, type="l", ylab="Energy sub metering", xlab="")
+lines(date_and_time, as.numeric(data_date$Sub_metering_2), type="l", col="red")
+lines(date_and_time, as.numeric(data_date$Sub_metering_3), type="l", col="blue")
+legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3")
+	, lty=1, lwd=2.5, col=c("black", "red", "blue"))
+dev.off()
+
+
+##########
+# 4). Fourth graphic
+
+png("plot4.png")
+
+par(mfrow = c(2, 2)) 
+
+plot(date_and_time, as.numeric(data_date$Global_active_power), type="l", xlab="", ylab="Global Active Power", cex=0.2)
+
+plot(date_and_time, as.numeric(data_date$Voltage), type="l", xlab="datetime", ylab="Voltage")
+
+plot(date_and_time, as.numeric(data_date$Sub_metering_1), type="l", ylab="Energy sub metering", xlab="")
+lines(date_and_time, as.numeric(data_date$Sub_metering_2), type="l", col="red")
+lines(date_and_time, as.numeric(data_date$Sub_metering_3), type="l", col="blue")
+legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), lty=, lwd=2.5, col=c("black", "red", "blue"), bty="o")
+
+plot(date_and_time, as.numeric(data_date$Global_reactive_power), type="l", xlab="datetime", ylab="Global_reactive_power")
+
+dev.off()
