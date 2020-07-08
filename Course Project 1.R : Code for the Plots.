@@ -3,14 +3,23 @@
 #__________Alejandro Rubiano.__________
 ###########################################################
 
+	###########
+	#first, we need to set our working directory
+	##########
 setwd("./Cursos/Coursera R pratices")
 
+	##########
+	#then, we download from the link the specify data.
+	##########
 url_1<-"https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip"
 temp.file<-tempfile()
 download.file(url_1, temp.file)
 unzip(temp.file)
 unlink(temp.file)
 
+	###########
+	# we import the data, and change the current date format, to work well when we are plotting.
+	###########
 file<-"household_power_consumption.txt"
 
 data_household<-read.table(file, header=T, sep=";", stringsAsFactors=F, dec=".")
@@ -19,6 +28,10 @@ data_date<-data_household[data_household$Date %in% c("1/2/2007","2/2/2007") ,]
 
 Sys.setlocale("LC_TIME", "C")
 date_and_time <- strptime(paste(data_date$Date, data_date$Time, sep=" "), "%d/%m/%Y %H:%M:%S") 
+
+	#############
+	# After this, we start to replicate the plots from the "Readme.md" archive
+	#############
 
 #########
 # 1). First Graphic
